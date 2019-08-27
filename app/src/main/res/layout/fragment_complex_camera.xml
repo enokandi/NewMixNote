@@ -7,14 +7,7 @@
         tools:context=".fragments.ComplexCamera">
 
     <!-- TODO: Update blank fragment layout -->
-    <EditText
-            android:id="@+id/edittext_complexrecording"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="25dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextureView
             android:id="@+id/complexCameraPreviewTextureView"

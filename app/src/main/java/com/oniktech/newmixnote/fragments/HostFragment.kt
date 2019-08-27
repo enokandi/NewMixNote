@@ -34,6 +34,7 @@ class HostFragment : Fragment() {
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
     lateinit var startRecordingButton: ImageButton
+    lateinit var cameraButton : ImageButton
     lateinit var activity: Activity
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +60,10 @@ class HostFragment : Fragment() {
         startRecordingButton.setOnClickListener(){
 
              navController.navigate(R.id.action_complexNote_to_complexRecordingFragment)
+        }
+        cameraButton = view.findViewById(R.id.complex_host_takePhoto)
+        cameraButton.setOnClickListener(){
+            navController.navigate(R.id.action_complexNote_to_complexCamera)
         }
     }
 

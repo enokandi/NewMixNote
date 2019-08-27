@@ -250,6 +250,7 @@ class ComplexCamera : Fragment() {
     }
 
     private fun updateCameraUi() {
+
     }
 
 

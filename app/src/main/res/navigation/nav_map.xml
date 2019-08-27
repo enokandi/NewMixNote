@@ -17,10 +17,22 @@
                 app:exitAnim="@anim/nav_default_exit_anim"
                 app:popEnterAnim="@anim/nav_default_pop_enter_anim"
                 app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+                android:id="@+id/action_complexNote_to_complexCamera"
+                app:destination="@id/complexCamera"
+                app:enterAnim="@anim/nav_default_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+                app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
             android:id="@+id/complexRecordingFragment"
             android:name="com.oniktech.newmixnote.fragments.ComplexRecordingFragment"
             android:label="fragment_complex_recording"
             tools:layout="@layout/fragment_complex_recording" />
+    <fragment
+            android:id="@+id/complexCamera"
+            android:name="com.oniktech.newmixnote.fragments.ComplexCamera"
+            android:label="fragment_complex_camera"
+            tools:layout="@layout/fragment_complex_camera" />
 </navigation>

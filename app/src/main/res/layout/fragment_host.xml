@@ -68,6 +68,7 @@
                     android:background="@drawable/new_text" />
 
             <ImageButton
+                    android:id="@+id/complex_host_takePhoto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"

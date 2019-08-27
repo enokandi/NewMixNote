@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
-class MyViewPagerAdapter(fm: FragmentManager?): FragmentPagerAdapter(fm) {
+class MyViewPagerAdapter(fm: FragmentManager?): FragmentPagerAdapter(fm!!) {
 
     val fragments: MutableList<Fragment> = ArrayList();
     val fragmentNames : MutableList<String> = ArrayList()

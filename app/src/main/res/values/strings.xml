@@ -3,6 +3,12 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="textNote_header">Text Note</string>
+    <string name="checkList_header">Checklist</string>
+    <string name="pictureNote_header">Picture Note</string>
+    <string name="VoiceNote_header">Voice Note</string>
+    <string name="title_hint">Title</string>
+    <string name="fastNote_hint">Fast Note</string>
+    <string name="title_activity_main2">Main2Activity</string>
 
 </resources>

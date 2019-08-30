@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:paddingTop="4dp"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+            android:id="@+id/item_checklist_linear"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/item_checklist_checkbox"
+                    android:layout_marginTop="6dp"
+                    android:gravity="top"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_height="match_parent"
+                    android:button="@drawable/selector_checkbox" />
+
+            <EditText
+                    android:id="@+id/item_checklist_EditText"
+                    android:layout_width="0dp"
+                    android:paddingEnd="16dp"
+                    android:paddingStart="2dp"
+                    android:textSize="20sp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/timesnewroman"
+                    android:enabled="false"
+                    android:textColor="@color/colorBlack"
+                    android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <ImageView
+            android:id="@+id/item_checklist_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/create_checklist"
+            android:paddingEnd="2dp"
+            android:paddingStart="6dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="10dp"
+            android:layout_alignEnd="@+id/item_checklist_linear"/>
+
+</RelativeLayout>

@@ -198,90 +198,68 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return summary;
     }
 
+    public int insertNote_Checklist(String title) {
 
-    public CheckList insertChecklistNote(String title,String text,String checked) {
-        CheckList checklistItem;
-        int noteId=-1,id=-1;
-        //insert a new note
+        int noteId=-1;
+        //insert note
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(NOTE_COLUMN_TITLE, title);
         contentValues.put(NOTE_COLUMN_TYPE, "CheckList");
         db.insert(NOTE_TABLE_NAME, null, contentValues);
+
         //get id of created note
         db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select last_insert_rowid() as id from " + NOTE_TABLE_NAME, null);
         if (!res.isAfterLast()) {
             if (res.getCount() > 0) {
                 res.moveToNext();//must be first
-                noteId=res.getInt(res.getColumnIndex("id"));
-                db = this.getWritableDatabase();
-                contentValues = new ContentValues();
-                contentValues.put(CHECKLIST_COLUMN_CHECKNAME, text);
-                contentValues.put(CHECKLIST_COLUMN_NOTEID, noteId);
-                contentValues.put(CHECKLIST_COLUMN_CHECKED, checked);
-                //insert a new checklist item for note
-                db.insert(CHECKLIST_TABLE_NAME, null, contentValues);
+                noteId = res.getInt(res.getColumnIndex("id"));
             }
-        }
-        res.close();
-        //give id of checklist item
-        db = this.getReadableDatabase();
-        res = db.rawQuery("select last_insert_rowid() as id from " + CHECKLIST_TABLE_NAME, null);
-        if (!res.isAfterLast()) {
-            if (res.getCount() > 0) {
-                res.moveToNext();
-                id=res.getInt(res.getColumnIndex("id"));
-            }
-        }
-        res.close();
 
-        checklistItem=new CheckList(id,noteId,text,"false");
+        }res.close();
 
-        return checklistItem;
+        return noteId;
     }
 
-    public CheckList insertChecklistItem(int noteId, String text, String checked,String title) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public int insertChecklistNoteItem(int noteId,String text,String checked) {
         int id=-1;
-        CheckList checklistItem;
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(CHECKLIST_COLUMN_CHECKNAME, text);
         contentValues.put(CHECKLIST_COLUMN_NOTEID, noteId);
         contentValues.put(CHECKLIST_COLUMN_CHECKED, checked);
+        //insert a new checklist item for note
         db.insert(CHECKLIST_TABLE_NAME, null, contentValues);
 
         db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select last_insert_rowid() as id from " + CHECKLIST_TABLE_NAME, null);
         if (!res.isAfterLast()) {
             if (res.getCount() > 0) {
-                res.moveToNext();
-                id=res.getInt(res.getColumnIndex("id"));
+                res.moveToNext();//must be first
+                id = res.getInt(res.getColumnIndex("id"));
             }
-        }
-        res.close();
 
-        checklistItem=new CheckList(id,noteId,text,checked);
+        }res.close();
 
-        contentValues = new ContentValues();
-        contentValues.put(NOTE_COLUMN_TITLE, title);
-        db.update(NOTE_TABLE_NAME,contentValues ,NOTE_COLUMN_ID+" = "+noteId, null );
-
-        return checklistItem;
+        return id;
     }
 
-    public void updateChecklistItem(int id, String text, String checked,int noteId,String title) {
+
+    public void updateChecklistNoteItem(int id, String text, String checked) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(CHECKLIST_COLUMN_CHECKNAME, text);
         contentValues.put(CHECKLIST_COLUMN_CHECKED, checked);
         db.update(CHECKLIST_TABLE_NAME,contentValues ,CHECKLIST_COLUMN_ID+" = "+id, null );
-        contentValues = new ContentValues();
-        contentValues.put(NOTE_COLUMN_TITLE, title);
-        db.update(NOTE_TABLE_NAME,contentValues ,NOTE_COLUMN_ID+" = "+noteId, null );
     }
-
+    public void updateNote_checklist(int noteId,String title) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(NOTE_COLUMN_TITLE, title);
+        db.update(NOTE_TABLE_NAME, contentValues, NOTE_COLUMN_ID + " = " + noteId, null);
+    }
 
   /*  public Integer deletePlates(Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();

@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,13 +23,13 @@ import com.oniktech.newmixnote.utils.DatabaseHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class CheckListActivity extends AppCompatActivity {
     ImageView create_Button;
     EditText title;
     RecyclerView recyclerView;
     DatabaseHelper databaseHelper;
-    ArrayList<CheckList> mainres;
     int id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,18 +48,20 @@ public class CheckListActivity extends AppCompatActivity {
         Animation anim_create= AnimationUtils.loadAnimation(CheckListActivity.this,R.anim.scale2);
 
         //content of recycler view
-        ArrayList<CheckList> mainres=new ArrayList<CheckList>();
+
 //<------------click listeners---------------------------------------------------
         create_Button.setOnClickListener(view -> {
 
             if(!( title.getText().toString().equals("") ))
             {
-                ;
-               // create_Button.startAnimation(anim_create);
-                     //   databaseHelper.updateChecklistItem(mainres.get(mainres.size()).getId(),
-                       //                                     mainres.get(mainres.size()).getCheckName(),
-                        //                                    mainres.get(mainres.size()).isChecked(),id,title.getText().toString());
-                //databaseHelper.insertChecklist(title.getText().toString(), title.getText().toString());
+                //if (id<0) insert a new note
+                if(id<0)
+                    id=databaseHelper.insertNote_Checklist(title.getText().toString());
+                //else update a exiting note
+                else
+                    databaseHelper.updateNote_checklist(id,title.getText().toString());
+
+                create_Button.startAnimation(anim_create);
 
             }else
             {
@@ -86,12 +89,12 @@ public class CheckListActivity extends AppCompatActivity {
         //------------------------------------------------------->//
 
         //get checklist data if exists
-        getChecklistData(mainres);
+        getChecklistData();
     }
 
 
-    private void getChecklistData(ArrayList<CheckList> mainres){
-
+    private void getChecklistData(){
+        ArrayList<CheckList> mainres=new ArrayList<CheckList>();
         recyclerView.setLayoutManager(new LinearLayoutManager(CheckListActivity.this));
 
         //if checklist created before
@@ -117,7 +120,7 @@ public class CheckListActivity extends AppCompatActivity {
 
         private ArrayList<CheckList> res;
 
-        adapter(ArrayList<CheckList> res) {
+        adapter(ArrayList<CheckList> res ) {
             this.res = res;
         }
 
@@ -144,62 +147,78 @@ public class CheckListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final CheckListActivity.adapter.myViewHolder holder, int position) {
 
-            ;
+            holder.text.requestFocus();
+
             holder.text.setText(res.get(position).getCheckName());
 
-
-            if(res.get(position).isChecked().equals("true"))
+            if(res.get(position).isChecked().equals("true")) {
                 holder.checkBox.setChecked(true);
+                holder.text.setTextColor(getResources().getColor(R.color.colorGray));
+            }
             else
                 holder.checkBox.setChecked(false);
 
-            //***********************************
-            if(res.get(position).getId()<0)
-                holder.text.setEnabled(true);
+            Animation anim_create_listItem= AnimationUtils.loadAnimation(CheckListActivity.this,R.anim.scale2);
 
-            //*****************************************
+            //for set focus on text by click
             holder.text.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                        holder.text.setEnabled(true);
+                    holder.text.setFocusableInTouchMode(true);
+                    holder.text.setFocusable(true);
+                    holder.text.requestFocus();
                 }
             });
+
+            //holder.checkBox.setOnCheckedChangeListener(new Vi);
+
             //for save checklist items
             holder.create_checklist.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
+                    String checked="false";
+                    if(holder.checkBox.isChecked()) {
+                        checked = "true";
+                    }
+                    int checklistItem_id;
                     //insert note and checklistitem
                     if(res.get(position).getId()<0 && id<0) {
                         if(!(holder.text.getText().toString().equals(""))) {
-                            holder.text.setEnabled(false);
-                            String checked="false";
-                            if(holder.checkBox.isChecked())
-                                checked="true";
-                            CheckList c =databaseHelper.insertChecklistNote(title.getText().toString(), holder.text.getText().toString(),checked);
-                            res.add(res.size() - 1, c);
-                            id=c.getNoteId();
+                            id=databaseHelper.insertNote_Checklist(title.getText().toString());
+                            checklistItem_id=databaseHelper.insertChecklistNoteItem(id,holder.text.getText().toString(),checked);
+                            res.add(res.size() - 1, new CheckList(checklistItem_id,id,holder.text.getText().toString(),checked));
+                            holder.create_checklist.startAnimation(anim_create_listItem);
+                            recyclerView.scrollToPosition(position+1);
                         }
 
                     }//just insert to checklist item
                     else if(res.get(position).getId()<0){
                         if(!(holder.text.getText().toString().equals(""))) {
-                            holder.text.setEnabled(false);
-                            String checked="false";
-                            if(holder.checkBox.isChecked())
-                                checked="true";
-                            res.add(res.size() - 1, databaseHelper.insertChecklistItem(id, holder.text.getText().toString(),checked,title.getText().toString()));
+                            if(!title.getText().toString().equals(""))
+                                databaseHelper.updateNote_checklist(id,title.getText().toString());
+                            checklistItem_id=databaseHelper.insertChecklistNoteItem(id,holder.text.getText().toString(),checked);
+                            res.add(res.size() - 1, new CheckList(checklistItem_id,id,holder.text.getText().toString(),checked));
+                            holder.create_checklist.startAnimation(anim_create_listItem);
+                            recyclerView.scrollToPosition(position+1);
+
                         }
                     }
                     //update checklist
                     else{
-                        holder.text.setEnabled(false);
-                        String checked = "false";
-                        if (holder.checkBox.isChecked())
-                            checked = "true";
-                        databaseHelper.updateChecklistItem(res.get(position).getId(), holder.text.getText().toString(), checked,id,title.getText().toString());
-                        res.set(position,new CheckList( res.get(position).getId(),id, holder.text.getText().toString(),checked) );
+                        if(checked.equals("true"))
+                            holder.text.setTextColor(getResources().getColor(R.color.colorGray));
+                        if(!title.getText().toString().equals(""))
+                            databaseHelper.updateNote_checklist(id,title.getText().toString());
+                        databaseHelper.updateChecklistNoteItem(res.get(position).getId(), holder.text.getText().toString(), checked);
+                        res.get(position).setChecked(checked);
+                        res.get(position).setCheckName( holder.text.getText().toString());
 
+                        if(position<res.size()-1){
+                            holder.create_checklist.startAnimation(anim_create_listItem);
+                            holder.text.setFocusableInTouchMode(false);
+                            holder.text.setFocusable(false);
+                        }
                     }
 
                 }

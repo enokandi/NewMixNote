@@ -6,19 +6,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageButton
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 
 import com.oniktech.newmixnote.R
+import java.text.SimpleDateFormat
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private const val DEFAULT_MODE = 0
+private const val RECORDING_MODE = 1
+private const val CAMERA_MODE = 2
+private const val NOTE_MODE = 3
 
 /**
  * A simple [Fragment] subclass.
@@ -29,13 +34,22 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class HostFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+    public var thisNoteDirectoryName: String = ""
+
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
-    lateinit var startRecordingButton: ImageButton
-    lateinit var cameraButton : ImageButton
+    lateinit var bigBottun: ImageButton
+    lateinit var rightButton : ImageButton
+    lateinit var leftButton : ImageButton
     lateinit var activity: Activity
+
+    lateinit var hostFragment : ComplexCamera
+    lateinit var frameLayout: FrameLayout
+
+    private var camearaFragment: ComplexCamera? = null
+
+    var currentMode: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +57,10 @@ class HostFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        currentMode = DEFAULT_MODE
+
+        thisNoteDirectoryName = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS").format(Date())
+        Toast.makeText(context , thisNoteDirectoryName , Toast.LENGTH_LONG).show()
     }
 
     override fun onCreateView(
@@ -55,16 +73,44 @@ class HostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        startRecordingButton = view.findViewById(R.id.complexStartRecordButton)
-        val navController = Navigation.findNavController(activity , R.id.host_fragment)
-        startRecordingButton.setOnClickListener(){
+       // frameLayout = view.findViewById(R.id.complex_host_frame_layout)
+       // hostFragment = ComplexCamera()
+        //fragmentManager?.beginTransaction()?.add(R.id.complex_host_frame_layout , hostFragment)?.commit()
+       // hostFragment.test(view.context)
 
+        /*
+        bigBottun = view.findViewById(R.id.camera_complexStartRecordButton)
+        val navController = Navigation.findNavController(activity , R.id.host_fragment)
+        navController.currentDestination
+        bigBottun.setOnClickListener(){
              navController.navigate(R.id.action_complexNote_to_complexRecordingFragment)
+            currentMode = RECORDING_MODE
+            bigBottun.background = resources.getDrawable(R.drawable.pause_complex)
         }
-        cameraButton = view.findViewById(R.id.complex_host_takePhoto)
-        cameraButton.setOnClickListener(){
+
+        rightButton = view.findViewById(R.id.camera_complex_host_right_button)
+        rightButton.setOnClickListener(){
             navController.navigate(R.id.action_complexNote_to_complexCamera)
+            if (currentMode != CAMERA_MODE){
+                currentMode = CAMERA_MODE
+                rightButton.background = resources.getDrawable(R.drawable.back_pic)
+                leftButton.background = resources.getDrawable(R.drawable.capturepic)
+            } else{
+
+            }
+
         }
+
+        leftButton = view.findViewById(R.id.camera_complex_host_left_button)
+        leftButton.setOnClickListener(){
+            if (currentMode == CAMERA_MODE){
+                takePic()
+            }
+        }   */
+    }
+
+    private fun takePic() {
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -32,10 +32,10 @@ class AutoFitPreviewBuilder private constructor(
     private var viewFinderRotation: Int? = null
 
     /** Internal variable used to keep track of the use-case's output dimension */
-    private var bufferDimens: Size = Size(0, 0)
+    private var bufferDimens: Size = Size(3456, 3456)
 
     /** Internal variable used to keep track of the view's dimension */
-    private var viewFinderDimens: Size = Size(0, 0)
+    private var viewFinderDimens: Size = Size(3456, 3456)
 
     /** Internal variable used to keep track of the view's display */
     private var viewFinderDisplay: Int = -1

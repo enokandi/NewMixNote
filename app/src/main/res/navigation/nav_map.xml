@@ -9,7 +9,7 @@
             android:id="@+id/complexNote"
             android:name="com.oniktech.newmixnote.fragments.ComplexNote"
             android:label="fragment_complex_note"
-            tools:layout="@layout/fragment_complex_note" >
+            tools:layout="@layout/fragment_complex_home" >
         <action
                 android:id="@+id/action_complexNote_to_complexRecordingFragment"
                 app:destination="@id/complexRecordingFragment"
@@ -35,4 +35,8 @@
             android:name="com.oniktech.newmixnote.fragments.ComplexCamera"
             android:label="fragment_complex_camera"
             tools:layout="@layout/fragment_complex_camera" />
+    <action
+            android:id="@+id/action_nav_map_self"
+            app:destination="@id/nav_map"
+            />
 </navigation>

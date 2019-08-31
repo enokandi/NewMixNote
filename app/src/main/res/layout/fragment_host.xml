@@ -13,16 +13,27 @@
         android:layout_height="match_parent"
     >
 
-    <fragment
-            android:id="@+id/host_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
+    <FrameLayout
+            android:id="@+id/complex_host_frame_layout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:defaultNavHost="true"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navGraph="@navigation/nav_map" />
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent" >
 
+        <fragment
+                android:id="@+id/host_fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:defaultNavHost="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:navGraph="@navigation/nav_map"
+                />
+
+    </FrameLayout>
+
+
+
+<!--
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
@@ -60,24 +71,26 @@
                 app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
-                    android:id="@+id/imageButton"
+                    android:id="@+id/complex_host_left_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_weight="1"
-                    android:background="@drawable/new_text" />
+                    android:background="@drawable/attachtext_on" />
 
             <ImageButton
-                    android:id="@+id/complex_host_takePhoto"
+                    android:id="@+id/complex_host_right_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_weight="1"
-                    android:background="@drawable/new_pic" />
+                    android:background="@drawable/attachpic_on" />
 
         </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    -->
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

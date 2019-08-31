@@ -51,6 +51,37 @@ class ComplexRecordingFragment : Fragment() {
     }
 
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+     /*   bigBottun = view.findViewById(R.id.camera_complexStartRecordButton)
+        val navController = Navigation.findNavController(activity , R.id.host_fragment)
+        navController.currentDestination
+        bigBottun.setOnClickListener(){
+            navController.navigate(R.id.action_complexNote_to_complexRecordingFragment)
+            currentMode = RECORDING_MODE
+            bigBottun.background = resources.getDrawable(R.drawable.pause_complex)
+        }
+
+        rightButton = view.findViewById(R.id.camera_complex_host_right_button)
+        rightButton.setOnClickListener(){
+            navController.navigate(R.id.action_complexNote_to_complexCamera)
+            if (currentMode != CAMERA_MODE){
+                currentMode = CAMERA_MODE
+                rightButton.background = resources.getDrawable(R.drawable.back_pic)
+                leftButton.background = resources.getDrawable(R.drawable.capturepic)
+            } else{
+
+            }
+
+        }
+
+        leftButton = view.findViewById(R.id.camera_complex_host_left_button)
+        leftButton.setOnClickListener(){
+            if (currentMode == CAMERA_MODE){
+                takePic()
+            }
+        } */
+    }
 
     /**
      * This interface must be implemented by activities that contain this

@@ -1,13 +1,14 @@
 package com.oniktech.newmixnote.fragments
 
-import android.content.Context
+import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 
 import com.oniktech.newmixnote.R
 
@@ -29,6 +30,10 @@ class ComplexNote : androidx.fragment.app.Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
+    lateinit var bigBottun: ImageButton
+    lateinit var rightButton : ImageButton
+    lateinit var leftButton : ImageButton
+    lateinit var activity: Activity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,12 +48,21 @@ class ComplexNote : androidx.fragment.app.Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_complex_note, container, false)
+        return inflater.inflate(R.layout.fragment_complex_home, container, false)
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {
         listener?.onFragmentInteraction(uri)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bigBottun = view.findViewById(R.id.host_complexStartRecordButton)
+        val navControler = view.findNavController()
+        bigBottun.setOnClickListener(){
+            navControler.navigate(R.id.action_complexNote_to_complexCamera)
+        }
     }
 
 
@@ -94,12 +108,10 @@ class ComplexNote : androidx.fragment.app.Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(activity: Activity) =
             ComplexNote().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+                this.activity = activity
             }
+
     }
 }

@@ -1,39 +1,22 @@
 package com.oniktech.newmixnote.fragments
 
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.BroadcastReceiver
-import android.content.Intent
-import android.content.IntentFilter
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.hardware.Camera
-import android.media.MediaScannerConnection
-import android.os.*
-import android.view.*
-import android.webkit.MimeTypeMap
-import android.widget.ImageButton
 import androidx.camera.core.CameraX
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageAnalysisConfig
 import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCapture.Metadata
 import androidx.camera.core.ImageCaptureConfig
-import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.core.PreviewConfig
-import androidx.navigation.Navigation
-import androidx.core.view.setPadding
-import androidx.lifecycle.lifecycleScope
 
 import android.content.Context
+import android.content.Intent
+import android.hardware.Camera
 import android.hardware.display.DisplayManager
+import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
-import android.os.HandlerThread
+import android.os.*
+import android.provider.Telephony.Mms.Part.FILENAME
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Rational
@@ -41,28 +24,20 @@ import android.view.LayoutInflater
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
-import androidx.camera.core.*
+import android.webkit.MimeTypeMap
+import android.widget.ImageButton
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import kotlinx.coroutines.launch
-import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.lang.Exception
-import java.nio.ByteBuffer
 import java.util.*
-import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 import com.oniktech.newmixnote.R
-import com.oniktech.newmixnote.activity.MainActivity
 import com.oniktech.newmixnote.utils.AutoFitPreviewBuilder
 import java.io.File
+import java.nio.file.Files.createFile
 import java.text.SimpleDateFormat
-import java.util.*
 
 typealias LumaListener = (luma: Double) -> Unit
 
@@ -89,6 +64,10 @@ class ComplexCamera : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
 
     lateinit var textureView: TextureView
+    lateinit var pauseButton: ImageButton
+    lateinit var backButton: ImageButton
+    lateinit var captureButton: ImageButton
+
     private lateinit var outputDirectory: File
     private lateinit var broadcastManager: LocalBroadcastManager
     private lateinit var thisNoteDirectoryName: String
@@ -150,12 +129,55 @@ class ComplexCamera : Fragment() {
         return inflater.inflate(R.layout.fragment_complex_camera, container, false)
     }
 
+
+
+ /*   private val imageSavedListener = object : ImageCapture.OnImageSavedListener {
+        override fun onError(
+            error: ImageCapture.UseCaseError, message: String, exc: Throwable?) {
+            Log.e(TAG, "Photo capture failed: $message")
+            exc?.printStackTrace()
+        }
+
+        override fun onImageSaved(photoFile: File) {
+            Log.d(TAG, "Photo capture succeeded: ${photoFile.absolutePath}")
+
+
+            // We can only change the foreground Drawable using API level 23+ API
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                // Update the gallery thumbnail with latest picture taken
+                setGalleryThumbnail(photoFile)
+            }
+
+            // Implicit broadcasts will be ignored for devices running API
+            // level >= 24, so if you only target 24+ you can remove this statement
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                requireActivity().sendBroadcast(
+                    Intent(Camera.ACTION_NEW_PICTURE, Uri.fromFile(photoFile))
+                )
+            }
+
+            // If the folder selected is an external media directory, this is unnecessary
+            // but otherwise other apps will not be able to access our images unless we
+            // scan them using [MediaScannerConnection]
+            val mimeType = MimeTypeMap.getSingleton()
+                .getMimeTypeFromExtension(photoFile.extension)
+            MediaScannerConnection.scanFile(
+                context, arrayOf(photoFile.absolutePath), arrayOf(mimeType), null)
+        }
+    }
+
+  */
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         thisNoteDirectoryName = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS").format(Date())
 
         container = view as ConstraintLayout
         textureView = view.findViewById(R.id.complexCameraPreviewTextureView)
+        pauseButton = view.findViewById(R.id.camera_complexStartRecordButton)
+        backButton = view.findViewById(R.id.camera_complex_host_right_button)
+        captureButton = view.findViewById(R.id.camera_complex_host_left_button)
 
         // broadcastManager = LocalBroadcastManager.getInstance(view.context)
 
@@ -176,6 +198,8 @@ class ComplexCamera : Fragment() {
             updateCameraUi()
             bindCameraUseCases()
 
+            onClick()
+
             // In the background, load latest photo taken (if any) for gallery thumbnail
             /*  lifecycleScope.launch(Dispatchers.IO) {
                 outputDirectory.listFiles { file ->
@@ -185,11 +209,44 @@ class ComplexCamera : Fragment() {
         }
     }
 
+    private fun onClick() {
+        captureButton.setOnClickListener(){
+
+            val file = File(Environment.getExternalStorageDirectory().absolutePath +"/jafar")
+
+                if(file.mkdirs())
+                    Toast.makeText(context , "shod" , Toast.LENGTH_LONG)
+
+
+            val photoFile: File = createFile(outputDirectory, FILENAME, PHOTO_EXTENSION , "ali")
+
+            val metadata = ImageCapture.Metadata().apply {
+                // Mirror image when using the front camera
+                isReversedHorizontal = lensFacing == CameraX.LensFacing.FRONT
+            }
+
+            imageCapture?.takePicture(photoFile, imageSavedListener , metadata
+                )
+        }
+
+        backButton.setOnClickListener(){
+
+        }
+
+        pauseButton.setOnClickListener(){
+
+        }
+    }
+
     private fun bindCameraUseCases() {
 
         // Get screen metrics used to setup camera for full screen resolution
         val metrics = DisplayMetrics().also {
             textureView.display.getRealMetrics(it) }
+
+        Toast.makeText(context , "w: ${metrics.widthPixels} , H: ${metrics.heightPixels}" , Toast.LENGTH_LONG).show()
+
+        metrics.widthPixels = 1200
         val screenAspectRatio = Rational(metrics.widthPixels, metrics.heightPixels)
         Log.d(TAG, "Screen metrics: ${metrics.widthPixels} x ${metrics.heightPixels}")
 
@@ -205,6 +262,7 @@ class ComplexCamera : Fragment() {
 
         // Use the auto-fit preview builder to automatically handle size and orientation changes
         preview = AutoFitPreviewBuilder.build(viewFinderConfig, textureView)
+
 
         // Set up the capture use case to allow users to take photos
         val imageCaptureConfig = ImageCaptureConfig.Builder().apply {
@@ -287,16 +345,65 @@ class ComplexCamera : Fragment() {
         fun onFragmentInteraction(uri: Uri)
     }
 
+    private val imageSavedListener = object : ImageCapture.OnImageSavedListener {
+        override fun onError(
+            error: ImageCapture.UseCaseError, message: String, exc: Throwable?) {
+            Log.e(TAG, "Photo capture failed: $message")
+            exc?.printStackTrace()
+            Toast.makeText(context , "ridi"  , Toast.LENGTH_LONG).show()
+        }
+
+        override fun onImageSaved(photoFile: File) {
+            Log.d(TAG, "Photo capture succeeded: ${photoFile.absolutePath}")
+
+
+            // We can only change the foreground Drawable using API level 23+ API
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                // Update the gallery thumbnail with latest picture taken
+            }
+
+            // Implicit broadcasts will be ignored for devices running API
+            // level >= 24, so if you only target 24+ you can remove this statement
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                requireActivity().sendBroadcast(
+                    Intent(Camera.ACTION_NEW_PICTURE, Uri.fromFile(photoFile))
+                )
+            }
+
+            // If the folder selected is an external media directory, this is unnecessary
+            // but otherwise other apps will not be able to access our images unless we
+            // scan them using [MediaScannerConnection]
+            val mimeType = MimeTypeMap.getSingleton()
+                .getMimeTypeFromExtension(photoFile.extension)
+            MediaScannerConnection.scanFile(
+                context, arrayOf(photoFile.absolutePath), arrayOf(mimeType), null)
+        }
+    }
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ComplexCamera.
-         */
-        // TODO: Rename and change types and number of parameters
+
+        private const val TAG = "CameraXBasic"
+        private const val FILENAME = "yyyy-MM-dd-HH-mm-ss-SSS"
+        private const val PHOTO_EXTENSION = ".jpg"
+
+        /** Helper function used to create a timestamped file */
+        private fun createFile(
+            baseFolder: File,
+            format: String,
+            extension: String,
+            thisNoteDirectoryName: String
+        ): File {
+            val thisNoteFolder:File = File(baseFolder.absolutePath + "/$thisNoteDirectoryName" )
+
+            //making specific folder for each note
+            if (!thisNoteFolder.exists())
+                thisNoteFolder.mkdirs()
+
+            return File(thisNoteFolder, SimpleDateFormat(format, Locale.US)
+                .format(System.currentTimeMillis()) + extension)
+        }
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             ComplexCamera().apply {

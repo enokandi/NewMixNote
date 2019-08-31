@@ -1,5 +1,6 @@
 package com.oniktech.newmixnote.activity
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -15,12 +16,27 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (!Permissions.requestPermissions(this)) finish()
+        if (!Permissions.requestPermissions(this)){ }
         val adapter: MyViewPagerAdapter = MyViewPagerAdapter(supportFragmentManager)
         val simpleNote = SimpleNote()
         val complexNote = HostFragment.newInstance(this)
         adapter.addFragment(simpleNote, "simpleNote")
         adapter.addFragment(complexNote , "complexNote")
         viewPager.adapter = adapter
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == Permissions.PERMISSIONS_REQUEST_CODE){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+            } else{
+                finish()
+            }
+        }
     }
 }

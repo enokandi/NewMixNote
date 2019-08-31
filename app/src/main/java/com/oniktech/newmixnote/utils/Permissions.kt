@@ -9,12 +9,11 @@ import android.os.Build
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 
-private const val PERMISSIONS_REQUEST_CODE = 10
+public const val PERMISSIONS_REQUEST_CODE = 10
 private val PERMISSIONS_REQUIRED = arrayOf(
     Manifest.permission.CAMERA,
     Manifest.permission.RECORD_AUDIO,
-    Manifest.permission.WRITE_CONTACTS,
-    Manifest.permission.READ_EXTERNAL_STORAGE )
+    Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
 @TargetApi(Build.VERSION_CODES.M)
 fun requestPermissions(activity: Activity):Boolean{

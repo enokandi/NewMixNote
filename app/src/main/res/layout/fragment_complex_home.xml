@@ -4,26 +4,23 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.ComplexRecordingFragment">
+        tools:context=".fragments.ComplexNote">
 
-    <!-- TODO: Update blank fragment layout -->
 
-    <EditText
-            android:id="@+id/edittext_complexrecording"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="25dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <androidx.recyclerview.widget.RecyclerView
 
-    <FrameLayout
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edittext_complexrecording" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+            app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -35,22 +32,22 @@
 
 
         <ImageView
-                android:id="@+id/recording_backgroung_imageView"
+                android:id="@+id/camera_backgroung_imageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/background_wave" />
 
         <ImageButton
-                android:id="@+id/recording_complexStartRecordButton"
+                android:id="@+id/host_complexStartRecordButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/record_complex"
-                app:layout_constraintBottom_toBottomOf="@+id/recording_backgroung_imageView"
+                app:layout_constraintBottom_toBottomOf="@+id/camera_backgroung_imageView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/recording_backgroung_imageView" />
+                app:layout_constraintTop_toTopOf="@+id/camera_backgroung_imageView" />
 
         <LinearLayout
                 android:layout_width="wrap_content"
@@ -58,11 +55,11 @@
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/recording_complexStartRecordButton"
+                app:layout_constraintStart_toEndOf="@+id/host_complexStartRecordButton"
                 app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
-                    android:id="@+id/recording_complex_host_left_button"
+                    android:id="@+id/host_complex_host_left_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -70,7 +67,7 @@
                     android:background="@drawable/attachtext_on" />
 
             <ImageButton
-                    android:id="@+id/recording_complex_host_right_button"
+                    android:id="@+id/host_complex_host_right_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -81,5 +78,8 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

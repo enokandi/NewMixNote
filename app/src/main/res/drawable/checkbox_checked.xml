@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+        android:paddingEnd="2dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:paddingStart="2dp">
+
+    <item>
+        <shape>
+            <solid android:color="@color/colorWhite"/>
+            <stroke  android:width="3dp" android:color="@color/colorBlue" />
+            <size    android:height="32dp" android:width="32dp"/>
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+
+    <item    android:drawable="@drawable/create"
+            android:gravity="center|end"
+            android:bottom="4dp"
+            android:left="8dp"
+            android:id="@+id/checkbox_ticket">
+    </item>
+
+</layer-list>
